@@ -11,14 +11,14 @@ function divide(num, num2) {
     return num/num2;
 }
 
-let number1 = "";
-let number2 = "";
+let number1 = 0;
+let number2 = 0;
 let operator = "";
 
 
 function operate(number1, number2, operator) {
     
-    if(operator === "+") return add(number1, number2);
+    if(operator === "+") return add(number1, number2)
     if(operator === '-') return subtract(number1, number2);
     if(operator === '×') return multiply(number1, number2);
     if(operator === '÷') return divide(number1, number2);
@@ -47,7 +47,7 @@ const clear = document.querySelector(".clear");
 const erase = document.querySelector(".delete")
 
 
-let displayNumber = [];
+let displayNumber = "";
 
 num1.addEventListener("click", () => {
     screen.textContent += 1
@@ -104,52 +104,122 @@ numDot.addEventListener("click", () => {
     displayNumber += numDot.textContent;
 })
 
-numMultiply.addEventListener("click", () => {
-    screen.textContent += numMultiply.textContent
-    displayNumber += numMultiply.textContent
-    operator += "×"
-})
-
-numDivision.addEventListener("click", () => {
-    screen.textContent += numDivision.textContent
-    displayNumber += numDivision.textContent
-    operator += "÷"
-})
-
-numSubtract.addEventListener("click", () => {
-    screen.textContent += numSubtract.textContent
-    displayNumber += numSubtract.textContent
-    operator += "-"
-})
-
-numPlus.addEventListener("click", () => {
-    screen.textContent += numPlus.textContent
-    displayNumber += "+"
-    operator += "+"
-})
-
-
-
-numEqual.addEventListener("click", () => {
+function fullOp() {
     let arrNumber = Array.from(displayNumber)
     let numArr = Array.from((arrNumber.slice(0, arrNumber.indexOf(operator))))
     number1 = Number(numArr.join().replaceAll(",", ""))
     let indexOp = arrNumber.indexOf(operator) + 1
     numArr2 = arrNumber.slice(indexOp)
     number2 = Number(numArr2.join().replaceAll(",", ""))
-    screen.textContent = operate(number1, number2, operator)
+    return screen.textContent = operate(number1, number2, operator), number1 = operate(number1, number2, operator),
+    number2 = "", displayNumber = `${number1}`;
+}
+
+function fullOpV2() {
+    let arrNumber = Array.from(displayNumber)
+    let numArr = Array.from((arrNumber.slice(0, arrNumber.indexOf(operator))))
+    number1 = Number(numArr.join().replaceAll(",", ""))
+    let indexOp = arrNumber.indexOf(operator) + 1
+    let numArr2 = arrNumber.slice(indexOp)
+    number2 = Number(numArr2.join().replaceAll(",", ""))
+    number1 = operate(number1, number2, operator)
+    number2 = 0
+    displayNumber = ""
+    displayNumber += number1;
+    return screen.textContent = number1;
+}
+
+
+// function numberX() {
+//     let arrNumber = Array.from(displayNumber)
+//     let numArr = []
+//     if(arrNumber.length > 1) {
+//         numArr = Array.from((arrNumber.slice(0, arrNumber.indexOf(operator))))
+//         return numArr;
+//     } 
+//     if (arrNumber.length === 1) {
+//         numArr = Array.from((arrNumber.slice(0)))
+//         return numArr;
+//     }
+// 
+//     number1 = Number(numArr.join().replaceAll(",", ""))
+//     return number1
+// }
+
+function numberY() {
+    let arrNumber = Array.from(displayNumber)
+    let indexOp = arrNumber.indexOf(operator) + 1
+    let numArr2 = arrNumber.slice(indexOp)
+    return Number(numArr2.join().replaceAll(",", ""))
+}
+
+
+numMultiply.addEventListener("click", () => {
+    screen.textContent += "×"
+    if( numberY() !== 0 && operator !== "") {
+        screen.textContent = "";
+        return fullOpV2(), operator = "×", displayNumber += operator,
+        screen.textContent += operator
+    }
+    displayNumber += "×"
+    operator = "×"
 })
 
-/* 
+numDivision.addEventListener("click", () => {
+    screen.textContent += "÷"
+    if( numberY() !== 0 && operator !== "") {
+        screen.textContent = "";
+        return fullOpV2(), operator = "÷", displayNumber += operator,
+        screen.textContent += operator
+    }
+    displayNumber += "÷"
+    operator = "÷"
+})
 
-1. find the operator from the array using indexOf.
+numSubtract.addEventListener("click", () => {
+    screen.textContent += "-"
+    if( numberY() !== 0 && operator !== "") {
+        screen.textContent = "";
+        return fullOpV2(), operator = "-", displayNumber += operator,
+        screen.textContent += operator
+    }
+    displayNumber += "-"
+    operator = "-"
+})
 
-2. slice from index 0 upto the index of the operator and
-   store it inside number1 variable.
+numPlus.addEventListener("click", () => {
+    screen.textContent += "+"
+    if( numberY() !== 0 && operator !== "") {
+        screen.textContent = "";
+        return fullOpV2(), operator = "+", displayNumber += operator,
+        screen.textContent += operator
+    }
+    displayNumber += "+"
+    operator = "+"
+})
 
-3. add 1 to the index of the operator and use that as a start 
-   to slice the rest of the array element and store the in the 
-   variable number2.
+numEqual.addEventListener("click", () => {
+    fullOp()
+})
+
+clear.addEventListener("click", () => {
+    number1 = 0;
+    number2 = 0; 
+    operator = "";
+    displayNumber = ""
+    screen.textContent = "";
+})
 
 
+
+
+/*
+
+when the operator button of the calculator is clicked check if variable number2 has any value - yes?
+
+then run the opVr2 function which will then take those three variable containing the two values, operator and then run needed formula.
+
+and pass the value to number1 variable and append it to the calculator screen 
+
+then assign the new clicked operator to the variable operator for further calculations.
 */
