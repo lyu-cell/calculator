@@ -11,6 +11,8 @@ function divide(num, num2) {
     return num/num2;
 }
 
+//Main variables that is used throughout all
+//operations of calculator
 let number1 = 0;
 let number2 = 0;
 let operator = "";
@@ -26,7 +28,7 @@ function operate(number1, number2, operator) {
 
 const screen = document.querySelector(".screen")
 
-// Query selectors for all of the keys
+// Query selectors for all of the calculator key's
 const num7 = document.querySelector(".num7");
 const num8 = document.querySelector(".num8")
 const num9 = document.querySelector(".num9");
@@ -97,6 +99,7 @@ num9.addEventListener("click", () => {
 num0.addEventListener("click", () => {
     screen.textContent += num0.textContent
     displayNumber += num0.textContent
+    if (displayNumber === "0") return alert("Enter Numbers First!"), clearF()
 })
 
 numDot.addEventListener("click", () => {
@@ -104,6 +107,8 @@ numDot.addEventListener("click", () => {
     displayNumber += numDot.textContent;
 })
 
+/* This function can perform calculation on one pair of value at a time using 
+   "operate" function */
 function fullOp() {
     let arrNumber = Array.from(displayNumber)
     let numArr = Array.from((arrNumber.slice(0, arrNumber.indexOf(operator))))
@@ -111,10 +116,16 @@ function fullOp() {
     let indexOp = arrNumber.indexOf(operator) + 1
     numArr2 = arrNumber.slice(indexOp)
     number2 = Number(numArr2.join().replaceAll(",", ""))
-    return screen.textContent = operate(number1, number2, operator), number1 = operate(number1, number2, operator),
-    number2 = "", displayNumber = `${number1}`;
+    number1 = operate(number1, number2, operator)
+    number2 = 0
+    displayNumber = ""
+    displayNumber += Math.round(number1);
+    operator = ""
+    return screen.textContent = Math.round(number1);
 }
 
+/* Allows calculation on multiple pairs of values with different operators simultaneously
+   and the calculations are performed on one "operator-value" pairs at a time using "operate()". */
 function fullOpV2() {
     let arrNumber = Array.from(displayNumber)
     let numArr = Array.from((arrNumber.slice(0, arrNumber.indexOf(operator))))
@@ -125,27 +136,13 @@ function fullOpV2() {
     number1 = operate(number1, number2, operator)
     number2 = 0
     displayNumber = ""
-    displayNumber += number1;
-    return screen.textContent = number1;
+    displayNumber += Math.round(number1);
+    return screen.textContent = Math.round(number1);
 }
 
-
-// function numberX() {
-//     let arrNumber = Array.from(displayNumber)
-//     let numArr = []
-//     if(arrNumber.length > 1) {
-//         numArr = Array.from((arrNumber.slice(0, arrNumber.indexOf(operator))))
-//         return numArr;
-//     } 
-//     if (arrNumber.length === 1) {
-//         numArr = Array.from((arrNumber.slice(0)))
-//         return numArr;
-//     }
-// 
-//     number1 = Number(numArr.join().replaceAll(",", ""))
-//     return number1
-// }
-
+/* Returns the second value of the "operator-value" pair, if it exist. 
+   the returned value is used in conditional statements to determine 
+   when to use the fullOpV2() function.*/
 function numberY() {
     let arrNumber = Array.from(displayNumber)
     let indexOp = arrNumber.indexOf(operator) + 1
@@ -156,6 +153,8 @@ function numberY() {
 
 numMultiply.addEventListener("click", () => {
     screen.textContent += "×"
+    /* conditional statement for "if" the fullOpV2()
+       function should be used when the button is clicked. */
     if( numberY() !== 0 && operator !== "") {
         screen.textContent = "";
         return fullOpV2(), operator = "×", displayNumber += operator,
@@ -198,28 +197,22 @@ numPlus.addEventListener("click", () => {
     operator = "+"
 })
 
+/* Returns the result of the calculation performed on "operator-value" pair
+   by calling fullOp() function*/ 
 numEqual.addEventListener("click", () => {
     fullOp()
+    if (displayNumber === "Infinity") return alert("Can't divide by 0"),clearF()
 })
 
-clear.addEventListener("click", () => {
+function clearF() {
     number1 = 0;
     number2 = 0; 
     operator = "";
     displayNumber = ""
     screen.textContent = "";
+}
+/* Resets the main variables behind the calculations
+   by removing their contained values */
+clear.addEventListener("click", () => {
+    clearF()
 })
-
-
-
-
-/*
-
-when the operator button of the calculator is clicked check if variable number2 has any value - yes?
-
-then run the opVr2 function which will then take those three variable containing the two values, operator and then run needed formula.
-
-and pass the value to number1 variable and append it to the calculator screen 
-
-then assign the new clicked operator to the variable operator for further calculations.
-*/
