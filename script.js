@@ -201,8 +201,8 @@ numPlus.addEventListener("click", () => {
    by calling fullOp() function*/ 
 numEqual.addEventListener("click", () => {
     if (displayNumber === "") return alert("Enter Numbers First!")
+    fullOp()
     if (displayNumber === "Infinity") return alert("Can't divide by 0!"),clearF()
-    else return fullOp()
 })
 
 function clearF() {
