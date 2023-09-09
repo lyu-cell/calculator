@@ -200,8 +200,9 @@ numPlus.addEventListener("click", () => {
 /* Returns the result of the calculation performed on "operator-value" pair
    by calling fullOp() function*/ 
 numEqual.addEventListener("click", () => {
-    fullOp()
-    if (displayNumber === "Infinity") return alert("Can't divide by 0"),clearF()
+    if (displayNumber === "") return alert("Enter Numbers First!")
+    if (displayNumber === "Infinity") return alert("Can't divide by 0!"),clearF()
+    else return fullOp()
 })
 
 function clearF() {
